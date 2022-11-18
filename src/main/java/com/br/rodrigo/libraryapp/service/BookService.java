@@ -1,11 +1,15 @@
 package com.br.rodrigo.libraryapp.service;
 
 import com.br.rodrigo.libraryapp.exceptions.ResourceNotFoundException;
+import com.br.rodrigo.libraryapp.exceptions.UploadException;
+import com.br.rodrigo.libraryapp.infra.FileSaver;
 import com.br.rodrigo.libraryapp.model.Book;
 import com.br.rodrigo.libraryapp.repository.BookRepository;
+import com.fasterxml.jackson.databind.ser.std.FileSerializer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -15,7 +19,11 @@ public class BookService {
     @Autowired
     private BookRepository repository;
 
-    public Book save(Book book){
+    @Autowired
+    private FileSaver fileSaver;
+
+    public Book save(Book book, String path){
+        book.setPathImage(path);
         return repository.save(book);
     }
 
@@ -34,5 +42,13 @@ public class BookService {
 
     public List<Book> findAll(){
         return repository.findAll();
+    }
+
+    public String uploadFile(MultipartFile imgBook) {
+        if (imgBook != null && !imgBook.getOriginalFilename().isEmpty()) return fileSaver.write(imgBook);
+        else{
+            throw new UploadException("Erro ao fazer o upload do arquivo");
+        }
+
     }
 }
