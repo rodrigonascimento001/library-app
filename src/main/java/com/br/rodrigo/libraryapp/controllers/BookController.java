@@ -28,7 +28,7 @@ public class BookController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<Book> getProductById(@PathVariable("id") Long id) {
+    public ResponseEntity<?> getProductById(@PathVariable("id") Long id) {
         return new ResponseEntity<Book>(bookService.findById(id), HttpStatus.OK);
     }
 
@@ -44,12 +44,8 @@ public class BookController {
         return new ResponseEntity<>(bookService.save(book,path),HttpStatus.CREATED);
     }
 
-
-
     @PutMapping(path = "/{id}")
     public ResponseEntity<?> update(@RequestBody Book book,@PathVariable Long id) {
-        bookService.update(id,book);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(bookService.update(id,book),HttpStatus.OK);
     }
-
 }

@@ -5,13 +5,14 @@ import com.br.rodrigo.libraryapp.exceptions.UploadException;
 import com.br.rodrigo.libraryapp.infra.FileSaver;
 import com.br.rodrigo.libraryapp.model.Book;
 import com.br.rodrigo.libraryapp.repository.BookRepository;
-import com.fasterxml.jackson.databind.ser.std.FileSerializer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+
+import static java.util.Objects.requireNonNull;
 
 @Service
 @RequiredArgsConstructor
@@ -44,11 +45,19 @@ public class BookService {
         return repository.findAll();
     }
 
-    public String uploadFile(MultipartFile imgBook) {
-        if (imgBook != null && !imgBook.getOriginalFilename().isEmpty()) return fileSaver.write(imgBook);
-        else{
-            throw new UploadException("Erro ao fazer o upload do arquivo");
+    public String uploadFile(MultipartFile imgBook)  {
+        try{
+            validateParameters(imgBook);
+            return fileSaver.write(imgBook);
+        }catch (UploadException e){
+            throw new UploadException("Erro ao executar upload do arquivo");
         }
 
+    }
+
+    public void validateParameters(MultipartFile imgBook) throws UploadException {
+        if (imgBook == null ||  requireNonNull(imgBook.getOriginalFilename()).isEmpty()){
+            throw new UploadException("Erro ao fazer o upload do arquivo");
+        }
     }
 }
