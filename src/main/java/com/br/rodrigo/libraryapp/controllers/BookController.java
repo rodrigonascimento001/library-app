@@ -6,9 +6,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class BookController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<Book> getProductById(@PathVariable("id") Long id) {
+    public ResponseEntity<?> getProductById(@PathVariable("id") Long id) {
         return new ResponseEntity<Book>(bookService.findById(id), HttpStatus.OK);
     }
 
@@ -38,14 +39,13 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody Book book) {
-        return new ResponseEntity<>(bookService.save(book),HttpStatus.CREATED);
+    public ResponseEntity<?> save(@ModelAttribute Book book, MultipartFile imgBook) {
+        final String path = bookService.uploadFile(imgBook);
+        return new ResponseEntity<>(bookService.save(book,path),HttpStatus.CREATED);
     }
 
     @PutMapping(path = "/{id}")
     public ResponseEntity<?> update(@RequestBody Book book,@PathVariable Long id) {
-        bookService.update(id,book);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(bookService.update(id,book),HttpStatus.OK);
     }
-
 }
