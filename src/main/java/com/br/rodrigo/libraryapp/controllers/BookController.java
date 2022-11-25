@@ -6,14 +6,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/v1/books")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -39,8 +38,8 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@ModelAttribute Book book, MultipartFile imgBook) {
-        final String path = bookService.uploadFile(imgBook);
+    public ResponseEntity<?> save(@ModelAttribute Book book,@RequestParam("image") MultipartFile imageFile) {
+        final String path = bookService.uploadFile(imageFile);
         return new ResponseEntity<>(bookService.save(book,path),HttpStatus.CREATED);
     }
 
