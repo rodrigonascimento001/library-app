@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@CrossOrigin(origins =  { "http://localhost:4200","http://libraryapp-static-s3-rodrigo.s3-website-us-east-1.amazonaws.com/books"})
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/v1/books")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
