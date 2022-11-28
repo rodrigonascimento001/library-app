@@ -11,3 +11,6 @@ Projeto de exemplo implementação de uma api utilizando springboot utilizando i
 - AWS IAM
 
 
+
+Arquitetura da solução:
+![diagramalibrary](https://user-images.githubusercontent.com/37355015/204369992-aea925fe-95c3-4f6a-9824-1d5927396d16.png)
