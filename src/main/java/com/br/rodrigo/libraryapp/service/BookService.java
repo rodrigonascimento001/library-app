@@ -28,7 +28,8 @@ public class BookService {
         return repository.save(book);
     }
 
-    public Book update(long id, Book book){
+    public Book update(long id, Book book, String path){
+        book.setPathImage(path);
         return repository.save(book);
     }
 

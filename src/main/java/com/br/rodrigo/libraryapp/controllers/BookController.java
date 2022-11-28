@@ -44,7 +44,8 @@ public class BookController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<?> update(@RequestBody Book book,@PathVariable Long id) {
-        return new ResponseEntity<>(bookService.update(id,book),HttpStatus.OK);
+    public ResponseEntity<?> update(@ModelAttribute Book book,@PathVariable Long id, @RequestParam("image") MultipartFile imageFile) {
+        final String path = bookService.uploadFile(imageFile);
+        return new ResponseEntity<>(bookService.update(id,book,path),HttpStatus.OK);
     }
 }
